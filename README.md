@@ -45,7 +45,25 @@ via terminal
 
 `cd bolagsverket-pokemon-backend`
 
+`docker compose up -d --build`
+
 `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
+
+#### Swagger UI
+
+Swagger UI is enabled for the dev profile only.
+
+`http://localhost:8092/swagger-ui/index.html`
+
+APIs can also be tested in Postman or via terminal using curl command.
+
+## API Overview
+
+#### List all pokemon Names and id
+```
+curl -X GET "http://localhost:8092/api/v0/pokemon"
+```
+
 
 ### Build Deployable Image
 ```
