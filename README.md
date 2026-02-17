@@ -39,10 +39,11 @@ as a favorite, and favorites are tied to the authenticated.
 * Any IDE (IntelliJ recommended) or terminal (Linux/Mac, [Git Bash](https://git-scm.com/downloads) for Windows)
 
 ## Getting Started
+via terminal
 
-`git clone <repo-url>`
+`git clone https://github.com/Rufus100Procent/bolagsverket-pokemon-backend.git`
 
-`cd project`
+`cd bolagsverket-pokemon-backend`
 
 `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
 
