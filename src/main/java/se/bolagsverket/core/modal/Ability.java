@@ -2,13 +2,14 @@ package se.bolagsverket.core.modal;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @SuppressWarnings("unused")
 @Table(name = "ability")
-public class Ability {
+public class Ability implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

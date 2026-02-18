@@ -3,13 +3,14 @@ package se.bolagsverket.core.modal;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "type")
 @SuppressWarnings("unsued")
-public class Type {
+public class Type implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

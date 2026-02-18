@@ -3,13 +3,14 @@ package se.bolagsverket.core.modal;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @SuppressWarnings("unused")
 @Table(name = "pokemon")
-public class Pokemon {
+public class Pokemon implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

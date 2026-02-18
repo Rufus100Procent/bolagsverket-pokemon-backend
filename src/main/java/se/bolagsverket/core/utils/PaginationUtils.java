@@ -9,6 +9,10 @@ public final class PaginationUtils {
     private PaginationUtils() {
     }
 
+    public static Pageable createPageable(int page, int size, String sort, String order) {
+        return createPageable(page, size, sort, order, "name");
+    }
+
     public static Pageable createPageable(int page, int size, String sort, String order, String defaultSortField) {
         Sort.Direction direction = determineDirection(order);
         String sortField = (sort != null) ? sort : defaultSortField;

@@ -30,7 +30,13 @@ as a favorite, and favorites are tied to the authenticated.
 ---
 
 # Current state of the App
-* Under development
+This project fulfils all the original requirements plus additional things added like:
+* Api's for Pokemon Type and Ability
+* Unit & Integration Test, parts of the System
+* Rate limit filter (protection against [DDoS](https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/))
+* Automatic protection of all APIs and future APIs, except those who are in exclude list
+* Request Payload validation
+
 ---
 
 ## Rate Limiting
@@ -43,6 +49,7 @@ response. The counter resets back to zero every 60 seconds.
 ### Validation
 
 Incoming JSON payloads are validated using Spring's  validation.
+
 invalid requests are rejected early with a clear error message before touching the database
 
 ---
@@ -113,6 +120,8 @@ APIs can also be tested in Postman or terminal using curl command.
 
 The following endpoints are public and require no token:
 * `GET /api/v0/pokemon`
+* `GET /api/v0/ability`
+* `GET /api/v0/type`
 * `/api/v0/auth/**`
 * `GET /v3/api-docs/**`
 * `GET /swagger-ui.html`
@@ -171,25 +180,26 @@ Response:
 
 #### Get Pokemon by ID
 ```
-curl -i -X GET http://localhost:8092/api/v0/pokemon/1 -H "Authorization: Bearer YOUR_TOKEN_HERE"
+curl -i -X GET http://localhost:8092/api/v0/pokemon/2 -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 Response:
 
 ```json
 {
-    "abilities": [
-        "chlorophyll",
-        "overgrow"
-    ],
-    "baseExperience": 64,
-    "height": 7,
-    "id": 1,
-    "name": "bulbasaur",
-    "types": [
-        "grass",
-        "poison"
-    ],
-    "weight": 69
+  "abilities": [
+    "chlorophyll",
+    "overgrow"
+  ],
+  "baseExperience": 142,
+  "favorite": false,
+  "height": 10,
+  "id": 2,
+  "name": "ivysaur",
+  "types": [
+    "new",
+    "poison"
+  ],
+  "weight": 130
 }
 ```
 #### Update Pokemon
@@ -226,7 +236,7 @@ curl -i -X PUT http://localhost:8092/api/v0/pokemon/460 \
 ```
 #### Toggle Pokemon favorite
 Favorites are tied to the authenticated user's JWT token. Once a pokemon is set as a favorite, 
-only the user who set it can see it — every user has their own independent favorites
+only the user who set it can see it, every user has their own independent favorites
 
 ```
 curl -i -X PUT http://localhost:8092/api/v0/pokemon/2/favorite?value=true \
@@ -242,8 +252,26 @@ curl -i -X DELETE http://localhost:8092/api/v0/pokemon/1 \
 
 ---
 
-### Build Deployable Image
+### Additional Api
+
+#### type
+```http://localhost:8092/api/v0/type```
+
+```http://localhost:8092/api/v0/ability```
+
+### Build App into Deployable Image
 ```
 docker build -t bolagsverket-pokemon-backend:0.1.0 .
 ```
 
+```
+
+docker run -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=staging \
+  -e DATABASE_URL_STAGING=${DATABASE_URL_STAGING} \
+  -e DB_STAGING_USERNAME=${DB_STAGING_USERNAME} \
+  -e DB_STAGING_PASSWORD=${DB_STAGING_PASSWORD} \
+  -e JWT_SECRET=${JWT_SECRET} \
+  bolagsverket-pokemon-backend:0.1.0
+
+```

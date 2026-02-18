@@ -16,8 +16,6 @@ import se.bolagsverket.security.modal.User;
 import se.bolagsverket.security.repo.UserRepository;
 import se.bolagsverket.security.utils.JwtUtil;
 
-import java.time.LocalDateTime;
-
 @Service
 public class AuthService {
 

@@ -10,7 +10,7 @@ import se.bolagsverket.core.dto.external.PokemonListResponse;
 @HttpExchange(accept = "application/json")
 public interface PokemonClient {
 
-    @GetExchange("/pokemon?limit=30")
+    @GetExchange("/pokemon?limit=40")
     PokemonListResponse getall();
 
     @GetExchange("/pokemon/{nameOrId}")

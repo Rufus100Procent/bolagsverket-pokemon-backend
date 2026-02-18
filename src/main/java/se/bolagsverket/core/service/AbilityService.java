@@ -2,9 +2,13 @@ package se.bolagsverket.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import se.bolagsverket.core.dto.PaginationDto;
 import se.bolagsverket.core.modal.Ability;
 import se.bolagsverket.core.repo.AbilityRepository;
+import se.bolagsverket.core.utils.PaginationUtils;
 import se.bolagsverket.error.ErrorType;
 import se.bolagsverket.error.PokemonException;
 
@@ -22,6 +26,26 @@ public class AbilityService {
         this.abilityRepository = abilityRepository;
     }
 
+
+    public PaginationDto<Ability> getAbilities(int page, int size, String sort, String order) {
+        Pageable pageable = PaginationUtils.createPageable(page, size, sort, order);
+        Page<Ability> result = abilityRepository.findAll(pageable);
+        return PaginationDto.from(result);
+    }
+
+    public Ability updateAbility(Long id, String name) {
+        Ability ability = findAbilityById(id);
+
+        if (ability.getName().equalsIgnoreCase(name)) {
+            throw new PokemonException(ErrorType.INVALID_INPUT, "Ability name '" + name + "' is already set");
+        }
+
+        ability.setName(name);
+        abilityRepository.save(ability);
+
+        log.info("Ability updated: id={}, name={}", id, name);
+        return ability;
+    }
 
     public Ability findAbilityById(Long id) {
         return abilityRepository.findById(id)

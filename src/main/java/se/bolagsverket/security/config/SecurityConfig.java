@@ -45,7 +45,9 @@ public class SecurityConfig {
                                 "/actuator/**"
                         ).permitAll()
                         .requestMatchers(
-                                "/api/v0/pokemon").permitAll()
+                                "/api/v0/pokemon",
+                                "/api/v0/type",
+                                "/api/v0/ability").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(rateLimitingFilter(), UsernamePasswordAuthenticationFilter.class)
