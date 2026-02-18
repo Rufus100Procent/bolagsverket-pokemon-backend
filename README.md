@@ -59,10 +59,19 @@ APIs can also be tested in Postman or via terminal using curl command.
 
 ## API Overview
 
-#### List all pokemon Names and id
+#### List all pokemon Names
+
+Supports the following query parameters:
+* `type`: filter by type, for example `fire`, `water`, `grass`
+* `sort`: sort by `name` or `id`, defaults to `name`
+* `order`: `asc` sorts A to Z, `desc` sorts Z to A, defaults to `asc`
+* `page`: page number, defaults to `0`
+* `size`: results per page, defaults to `20`
+* 
 ```
-curl -X GET "http://localhost:8092/api/v0/pokemon"
+curl -X GET "http://localhost:8092/api/v0/pokemon?type=water&page=0&size=10&sort=name&order=desc"
 ```
+
 
 
 ### Build Deployable Image

@@ -128,4 +128,5 @@ public class PokemonDataInitializer implements CommandLineRunner {
 
         return abilities;
     }
+
 }
