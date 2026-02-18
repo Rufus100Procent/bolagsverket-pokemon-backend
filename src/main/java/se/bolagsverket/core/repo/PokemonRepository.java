@@ -11,6 +11,8 @@ import se.bolagsverket.core.modal.Pokemon;
 @Repository
 public interface PokemonRepository extends JpaRepository<Pokemon, Long> {
 
+    boolean existsByName(String name);
+
     @Query("SELECT DISTINCT p FROM Pokemon p JOIN p.types t WHERE t.name = :typeName")
     Page<Pokemon> findByTypeName(@Param("typeName") String typeName, Pageable pageable);
 

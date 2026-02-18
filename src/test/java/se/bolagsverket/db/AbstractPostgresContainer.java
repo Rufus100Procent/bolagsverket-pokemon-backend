@@ -1,4 +1,4 @@
-package se.bolagsverket;
+package se.bolagsverket.db;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

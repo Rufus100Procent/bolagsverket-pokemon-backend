@@ -12,6 +12,7 @@ import se.bolagsverket.core.repo.AbilityRepository;
 import se.bolagsverket.core.repo.PokemonRepository;
 import se.bolagsverket.core.repo.TypeRepository;
 import se.bolagsverket.core.service.PokemonService;
+import se.bolagsverket.db.AbstractPostgresContainer;
 
 
 import static org.junit.jupiter.api.Assertions.*;

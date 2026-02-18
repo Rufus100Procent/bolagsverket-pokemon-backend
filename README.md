@@ -1,6 +1,5 @@
 # Bologsverket Pokemon Backend
 
-
 ## About
 This project is a coding challenge, in other words "ArbetsProv" for Bolagsverket.
 
@@ -32,6 +31,43 @@ as a favorite, and favorites are tied to the authenticated.
 
 # Current state of the App
 * Under development
+---
+
+## Rate Limiting
+
+The application uses in-memory IP-based rate limiting. Each IP address is allowed a maximum of
+25 requests per 60 seconds. If you exceed this limit you will receive a `429 Too Many Requests`
+response. The counter resets back to zero every 60 seconds.
+
+---
+## Spring Oauth2 Resource Server
+
+The API is secured using Spring Security's OAuth2 Resource Server. By adding a single
+dependency and minimal configuration, Spring automatically protects every endpoint and future
+
+Behind the scenes, on every incoming request Spring intercepts it before it reaches the
+controller, extracts the `Authorization: Bearer <token>` header, decodes and validates the
+JWT signature using the secret key, and rejects the request with [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/401)
+if the token is missing, expired, or tampered with.
+
+
+---
+## Authentication
+
+The application uses simple username and password authentication and is completely stateless,
+no session is stored on the server. Every request must carry its own JWT token to prove identity.
+
+Passwords are never stored in plain text, Spring automatically hashes them using
+[BCrypt](https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html)
+before saving to the database. BCrypt is a one-way hashing algorithm, meaning the original
+password can never be recovered from the hash. When you log in, Spring hashes the incoming
+password and compares it against the stored hash to verify your identity.
+
+Once authenticated, the application returns a signed JWT token. This token must be included in the
+`Authorization` header on all protected requests:
+```
+Authorization: Bearer <your-token>
+```
 
 ## Requirements
 * Docker
@@ -49,16 +85,58 @@ via terminal
 
 `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
 
+
+### Getting started with tests
+* `mvn test`
+
+* `mvn integration-test` or `mvn verify` to run integration testing
+
 #### Swagger UI
 
 Swagger UI is enabled for the dev profile only.
+```
+http://localhost:8092/swagger-ui/index.html
+```
+To test protected endpoints, first call the register and login API to get a JWT token, then click the
+**Authorize** button at the top right of the Swagger UI page and paste the token. All
+subsequent requests will include it automatically.
 
-`http://localhost:8092/swagger-ui/index.html`
-
-APIs can also be tested in Postman or via terminal using curl command.
+APIs can also be tested in Postman or terminal using curl command.
 
 ## API Overview
 
+The following endpoints are public and require no token:
+* `GET /api/v0/pokemon`
+* `/api/v0/auth/**`
+* `GET /v3/api-docs/**`
+* `GET /swagger-ui.html`
+* `GET /actuator/**`
+
+All other endpoints require a valid JWT token in the `Authorization` header.
+
+#### Register
+```
+curl -X POST http://localhost:8092/api/v0/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password1"}'
+```
+Response:
+```
+"Successfully created user: <uuid>"
+```
+
+#### Login
+```
+curl -X POST http://localhost:8092/api/v0/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password1"}'
+```
+Response:
+```
+{ "accessToken": "eyJhbGciOi..." }
+```
+
+---
 #### List all pokemon Names
 
 Supports the following query parameters:
@@ -69,10 +147,65 @@ Supports the following query parameters:
 * `size`: results per page, defaults to `20`
 * 
 ```
-curl -X GET "http://localhost:8092/api/v0/pokemon?type=water&page=0&size=10&sort=name&order=desc"
+curl -i -X GET "http://localhost:8092/api/v0/pokemon?type=water&page=0&size=10&sort=name&order=desc"
+```
+Response:
+```
+{
+    "content": [
+        { "id": 460, "name": "abomasnow" }
+    ],
+    "page": 0,
+    "size": 20,
+    "totalElements": 1352,
+    "totalPages": 68,
+    "last": false
+}
 ```
 
+#### Get Pokemon by ID
+```
+curl -i -X GET http://localhost:8092/api/v0/pokemon/1 -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+Response:
 
+```json
+{
+    "abilities": [
+        "chlorophyll",
+        "overgrow"
+    ],
+    "baseExperience": 64,
+    "height": 7,
+    "id": 1,
+    "name": "bulbasaur",
+    "types": [
+        "grass",
+        "poison"
+    ],
+    "weight": 69
+}
+```
+#### Update Pokemon
+```
+curl -i -X PUT http://localhost:8092/api/v0/pokemon/460 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "abomasnow",
+    "height": 8,
+    "weight": 300,
+    "baseExperience": 218
+  }'
+```
+
+#### Delete Pokemon
+```
+curl -i -X DELETE http://localhost:8092/api/v0/pokemon/1 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+---
 
 ### Build Deployable Image
 ```

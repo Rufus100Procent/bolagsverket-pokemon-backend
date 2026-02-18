@@ -64,5 +64,25 @@ public class Pokemon {
 
     public void setTypes(Set<Type> types) { this.types = types; }
 
+    public Set<Type> getTypes() {
+        return types;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public Integer getBaseExperience() {
+        return baseExperience;
+    }
+
+    public Set<Ability> getAbilities() {
+        return abilities;
+    }
+
     public void setAbilities(Set<Ability> abilities) { this.abilities = abilities; }
 }

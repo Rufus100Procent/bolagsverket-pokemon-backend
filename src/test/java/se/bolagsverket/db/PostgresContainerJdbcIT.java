@@ -1,4 +1,4 @@
-package se.bolagsverket;
+package se.bolagsverket.db;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
