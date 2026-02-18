@@ -7,6 +7,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import se.bolagsverket.error.ErrorType;
 import se.bolagsverket.error.JwtException;
@@ -51,6 +52,10 @@ public class JwtUtil {
         } catch (JOSEException e) {
             throw new JwtException(ErrorType.TOKEN_GENERATION_FAILED, "Failed to generate token", e);
         }
+    }
+
+    public static UUID extractUserId(Jwt jwt) {
+        return UUID.fromString(jwt.getClaimAsString("userId"));
     }
 
 }

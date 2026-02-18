@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import se.bolagsverket.core.modal.Pokemon;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -26,6 +27,19 @@ public class User implements UserDetails {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "pokemon_id")
+    )
+    private Set<Pokemon> favorites = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     // UserDetails implementation
 
@@ -69,9 +83,13 @@ public class User implements UserDetails {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
+    public Set<Pokemon> getFavorites() { return favorites; }
+    public void setFavorites(Set<Pokemon> favorites) { this.favorites = favorites; }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    public void addFavorite(Pokemon pokemon) { this.favorites.add(pokemon); }
+    public void removeFavorite(Pokemon pokemon) { this.favorites.remove(pokemon); }
 }

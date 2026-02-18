@@ -49,7 +49,6 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setHashPassword(passwordEncoder.encode(request.getPassword()));
-        user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 

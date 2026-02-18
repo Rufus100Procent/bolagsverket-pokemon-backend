@@ -40,6 +40,12 @@ The application uses in-memory IP-based rate limiting. Each IP address is allowe
 response. The counter resets back to zero every 60 seconds.
 
 ---
+### Validation
+
+Incoming JSON payloads are validated using Spring's  validation.
+invalid requests are rejected early with a clear error message before touching the database
+
+---
 ## Spring Oauth2 Resource Server
 
 The API is secured using Spring Security's OAuth2 Resource Server. By adding a single
@@ -192,11 +198,40 @@ curl -i -X PUT http://localhost:8092/api/v0/pokemon/460 \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "abomasnow",
-    "height": 8,
-    "weight": 300,
-    "baseExperience": 218
-  }'
+  "name": "bulbasaur",
+  "height": 10,
+  "weight": 70,
+  "baseExperience": 100,
+  "typeIds": [1, 3],
+  "abilityIds": [2],
+  "favorite": true
+}'
+```
+if you get error "Pokemon 'Name' is already in favorites" remove favorites from json payload
+
+#### Create Pokemon
+```
+curl -i -X PUT http://localhost:8092/api/v0/pokemon/460 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "name": "newNmae",
+  "height": 7,
+  "weight": 69,
+  "baseExperience": 64,
+  "typeIds": [1, 2],
+  "abilityIds": [1],
+  "favorite": true
+}'
+```
+#### Toggle Pokemon favorite
+Favorites are tied to the authenticated user's JWT token. Once a pokemon is set as a favorite, 
+only the user who set it can see it — every user has their own independent favorites
+
+```
+curl -i -X PUT http://localhost:8092/api/v0/pokemon/2/favorite?value=true \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
 ```
 
 #### Delete Pokemon

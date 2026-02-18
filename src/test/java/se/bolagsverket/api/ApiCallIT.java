@@ -14,14 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class PokemonControllerIT extends AbstractPostgresContainer {
+class ApiCallIT extends AbstractPostgresContainer {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void deletePokemon_withoutToken_returns401() throws Exception {
-        mockMvc.perform(delete("/api/v0/pokemon/1"))
+    void call_api_withoutToken_returns401() throws Exception {
+        mockMvc.perform(delete("/api/v0/something/1"))
                 .andExpect(status().isUnauthorized());
     }
+
 }

@@ -12,6 +12,7 @@ public class PokemonDetailsDto {
     private Integer baseExperience;
     private List<String> types;
     private List<String> abilities;
+    private boolean favorite;
 
     public Long getId() {
         return id;
@@ -67,5 +68,14 @@ public class PokemonDetailsDto {
 
     public List<String> getAbilities() {
         return abilities;
+  }
+
+    public boolean isFavorite() {
+        return favorite;
     }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
 }

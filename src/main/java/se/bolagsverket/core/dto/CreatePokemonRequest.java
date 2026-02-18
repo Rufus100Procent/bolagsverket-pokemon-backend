@@ -31,7 +31,9 @@ public class CreatePokemonRequest {
     @NotEmpty(message = "At least one ability is required")
     private Set<Long> abilityIds;
 
-   public CreatePokemonRequest() {
+    private boolean favorite;
+
+    public CreatePokemonRequest() {
     }
 
     public CreatePokemonRequest(String name, Integer height, Integer weight, Integer baseExperience) {
@@ -83,6 +85,14 @@ public class CreatePokemonRequest {
 
     public void setAbilityIds(Set<Long> abilityIds) {
         this.abilityIds = abilityIds;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public void setBaseExperience(Integer baseExperience) {
