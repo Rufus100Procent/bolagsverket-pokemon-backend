@@ -37,7 +37,6 @@ This project fulfils all the original requirements plus additional things added 
 * Automatic protection of all APIs and future APIs, except those who are in exclude list
 * Request Payload validation
 
----
 
 ## Rate Limiting
 
@@ -45,14 +44,14 @@ The application uses in-memory IP-based rate limiting. Each IP address is allowe
 25 requests per 60 seconds. If you exceed this limit you will receive a `429 Too Many Requests`
 response. The counter resets back to zero every 60 seconds.
 
----
+
 ### Validation
 
 Incoming JSON payloads are validated using Spring's  validation.
 
 invalid requests are rejected early with a clear error message before touching the database
 
----
+
 ## Spring Oauth2 Resource Server
 
 The API is secured using Spring Security's OAuth2 Resource Server. By adding a single
@@ -64,7 +63,6 @@ JWT signature using the secret key, and rejects the request with [401 Unauthoriz
 if the token is missing, expired, or tampered with.
 
 
----
 ## Authentication
 
 The application uses simple username and password authentication and is completely stateless,
@@ -81,6 +79,7 @@ Once authenticated, the application returns a signed JWT token. This token must 
 ```
 Authorization: Bearer <your-token>
 ```
+---
 
 ## Requirements
 * Docker
@@ -115,6 +114,8 @@ To test protected endpoints, first call the register and login API to get a JWT 
 subsequent requests will include it automatically.
 
 APIs can also be tested in Postman or terminal using curl command.
+
+---
 
 ## API Overview
 
@@ -151,7 +152,6 @@ Response:
 { "accessToken": "eyJhbGciOi..." }
 ```
 
----
 #### List all pokemon Names
 
 Supports the following query parameters:
@@ -258,6 +258,9 @@ curl -i -X DELETE http://localhost:8092/api/v0/pokemon/1 \
 ```http://localhost:8092/api/v0/type```
 
 ```http://localhost:8092/api/v0/ability```
+
+---
+
 
 ### Build App into Deployable Image
 ```

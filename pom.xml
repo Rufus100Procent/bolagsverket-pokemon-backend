@@ -10,7 +10,7 @@
     </parent>
     <groupId>se.bolagsverket</groupId>
     <artifactId>bolagsverket-pokemon-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>bolagsverket-pokemon-backend</name>
     <description>bolagsverket-pokemon-backend</description>
     <url/>
